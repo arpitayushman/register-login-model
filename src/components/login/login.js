@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./login.css"
 import axios from "axios";
-const Login = () => {
+import { useHistory } from "react-router-dom"
+const Login = ( {updateUser} ) => {
+    const history = useHistory()
     const [user, setUser] = useState({
         email: "",
         password: "",
@@ -15,7 +17,11 @@ const Login = () => {
     }
     const login = () => {
         axios.post("http://localhost:9002/login", user)
-        .then(res => alert(res.data.message))
+        .then(res => {
+            alert(res.data.message)
+            updateUser(res.data.user)
+            history.push("/")
+        })
     }
     return (
         <div className="login">
@@ -25,7 +31,7 @@ const Login = () => {
             <input type="password" name="password" value={user.password} placeholder="Password" onChange={handleChange}></input>
             <div className="button" onClick={login}>Login</div>
             <div>or</div>
-            <div className="button">Register</div>
+            <div className="button" onClick={() => history.push("/register")}>Register</div>
         </div>
     )
 }
